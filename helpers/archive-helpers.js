@@ -1,6 +1,8 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var Promise = require('bluebird');
+
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -15,6 +17,8 @@ exports.paths = {
   list: path.join(__dirname, '../archives/sites.txt')
 };
 
+var pathToUrlList = './archives/sites.txt';
+
 // Used for stubbing paths for tests, do not modify
 exports.initialize = function(pathsObj) {
   _.each(pathsObj, function(path, type) {
@@ -26,15 +30,41 @@ exports.initialize = function(pathsObj) {
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function() {
+  //add promise to wait for propogation of array of sites
+
+  return new Promise( (resolve, reject) => {
+    var readUrls = fs.readFile(pathToUrlList, (err, data) => {
+      if (err) {
+        reject(err);
+      }
+      return data.toString().split('\n');
+    });
+
+    resolve(readUrls);
+  });
+
+
 };
 
-exports.isUrlInList = function() {
+exports.isUrlInList = function(url) {
+
+  var isUrlInList = exports.readListOfUrls()
+    .then( readUrls => {
+      
+    });
+
+
+  if (url in sites.txt[urlList]) {
+    return true;
+  }
+  return false;
 };
 
 exports.addUrlToList = function() {
 };
 
 exports.isUrlArchived = function() {
+
 };
 
 exports.downloadUrls = function() {
